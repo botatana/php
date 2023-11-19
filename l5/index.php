@@ -1,5 +1,6 @@
 <?php 
-echo 'Hello world! <br/> ' ;
+$ty = 'Hello world! <br/> ';
+echo $ty ;
 
-echo str_replace("world","Friends","Hello world!") 
+echo str_replace("world","Friends",$ty) 
 ?>
