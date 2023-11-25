@@ -1,34 +1,30 @@
 <?php
+// Fetch data from the API
 $url = 'https://api.opendota.com/api/proMatches';
-for ($i = 0; $i < 10; $i++) {
+$response = file_get_contents($url);
 
-}
-$options= array(
-    "match_id" => 3703866531,
-    "duration" => 0,
-    "start_time" => 0,
-    "radiant_team_id"=> 0,
-    "radiant_name" => "string",
-    "dire_team_id"=> 0,
-    "dire_name"=> "string",
-    "leagueid"=> 0,
-    "league_name"=> "string",
-    "series_id"=> 0,
-    "series_type"=> 0,
-    "radiant_score"=> 0,
-    "dire_score"=> 0,
-    "radiant_win"=> true,
-    "radiant"=> true
-);
-$ch = curl_init();
-curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-curl_setopt($ch, CURLOPT_URL, $url.'?'.http_build_query($options));
-
-$response = curl_exec($ch);
+// Decode JSON response
 $data = json_decode($response, true);
-curl_close($ch);
 
-echo '<pre>';
-print_r($data);
+// Create a table
+echo '<table border="1">';
+echo '<tr><th>ID</th><th>Match Duration</th><th>Start Time</th><th>End Time</th><th>Team Name 1</th><th>Team Name 2</th></tr>';
 
+// Display the last 20 matches
+for ($i = 0; $i < 20; $i++) {
+    $match = $data[$i];
+
+    // Extracting relevant information
+    $id = $match['match_id'];
+    $duration = $match['duration'];
+    $startTime = date('Y-m-d H:i:s', $match['start_time']);
+    $endTime = date('Y-m-d H:i:s', $match['start_time'] + $match['duration']);
+    $teamName1 = $match['radiant_team']['name'];
+    $teamName2 = $match['dire_team']['name'];
+
+    // Displaying the data in the table
+    echo "<tr><td>$id</td><td>$duration</td><td>$startTime</td><td>$endTime</td><td>$teamName1</td><td>$teamName2</td></tr>";
+}
+
+echo '</table>';
 ?>
