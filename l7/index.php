@@ -1,23 +1,39 @@
 <?php
 
-function getRandomWord($len = 5) {
-    $word = array_merge(range('a', 'z'), range('A', 'Z'));
-    shuffle($word);
-    return substr(implode($word), 0, $len);
+function generateRandomWords($count = 500)
+{
+    $words = [];
+    for ($i = 0; $i < $count; $i++) {
+        $word = '';
+        $wordLength = rand(5, 10);
+        for ($j = 0; $j < $wordLength; $j++) {
+            $word .= chr(rand(97, 122)); 
+        }
+        $words[] = $word;
+    }
+    return implode(' ', $words);
 }
 
-$sign = ';';
+$randomWords = generateRandomWords();
 
-for ($i = 0; $i < 100; $i++) {
-    
-    echo getRandomWord();
-    if (($i + 1) % 5 == 0) {
-        echo $sign;
+function lineGenerator($text, $lineSeparator = ';', $limit = 25)
+{
+    $lines = explode($lineSeparator, $text);
+    $lineCount = 0;
+
+    foreach ($lines as $line) {
+        yield $line;
+
+        $lineCount++;
+        if ($lineCount >= $limit) {
+            break;
+        }
     }
-    echo "\n";
-    
+}
 
+foreach (lineGenerator($randomWords) as $line) {
+    echo $line . PHP_EOL;
+    echo memory_get_usage() . "\n";
 }
 
 ?>
-
