@@ -1,4 +1,18 @@
 <?php
+
+$lines = file('names.txt', FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+
+$lastLine = end($lines);
+
+$files = glob('./uploads/*');
+
+$lastDownloadedFile = end($files);
+
+$htmlContent = "<p>{$lastLine}</p>";
+$htmlContent .= "<img src='{$lastDownloadedFile}' alt='последний файл'>";
+
+echo $htmlContent;
+
 ?>
 <html>
 <head>
